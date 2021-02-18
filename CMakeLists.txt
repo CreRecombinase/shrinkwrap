@@ -31,12 +31,20 @@ FetchContent_Declare(
   zstd
   GIT_REPOSITORY https://github.com/facebook/zstd.git
   GIT_TAG v1.4.8
+  SOURCE_SUBDIR "build/cmake"
   )
-FetchContent_GetProperties(zstd)
-if(NOT zstd_POPULATED)
-  FetchContent_Populate(zstd)
-  add_subdirectory(${zstd_SOURCE_DIR}/build/cmake EXCLUDE_FROM_ALL)
-endif()
+FetchContent_MakeAvailable(zstd)
+
+# FetchContent_Declare(
+#   zstd
+#   GIT_REPOSITORY https://github.com/facebook/zstd.git
+#   GIT_TAG v1.4.8
+#   )
+# FetchContent_GetProperties(zstd)
+# if(NOT zstd_POPULATED)
+#   FetchContent_Populate(zstd)
+#   add_subdirectory(${zstd_SOURCE_DIR}/build/cmake EXCLUDE_FROM_ALL)
+# endif()
 
 
 find_package(LIBLZMA REQUIRED)
