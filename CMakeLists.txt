@@ -24,7 +24,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(zstd)
 
 
-find_package(LIBLZMA REQUIRED)
+find_package(LibLZMA REQUIRED)
 find_package(ZLIB)
 
 set(Shrinkwrap_headers
