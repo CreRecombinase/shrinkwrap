@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.2)
 include(ExternalProject)
 include(CMakePackageConfigHelpers)
-project(shrinkwrap VERSION 1.0.0)
+set(CMAKE_MODULE_PATH
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+project(shrinkwrap VERSION 1.0.0 LANGUAGES CXX)
 
-enable_testing()
+
+option(SHRINKWRAP_BUILD_TESTS "Set to ON to build tests" ON)
+if(SHRINKWRAP_BUILD_TESTS)
+  enable_testing()
+endif()
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -17,34 +23,33 @@ else()
     set(ZSTD_LIB_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}zstd${CMAKE_STATIC_LIBRARY_SUFFIX})
 endif()
 
-find_library(LIBLZMA_LIBRARIES
-             NAMES ${LIBLZMA_LIB_NAME})
+find_package(LibLZMA)
 
-find_library(ZLIB_LIBRARIES
-             NAMES ${ZLIB_LIB_NAME})
+find_package(ZLIB)
 
-find_library(ZSTD_LIBRARIES
-             NAMES ${ZSTD_LIB_NAME})
-
-if (NOT LIBLZMA_LIBRARIES)
-    message(FATAL_ERROR "lzma library not found")
-endif()
-
-if (NOT ZLIB_LIBRARIES)
-    message(FATAL_ERROR "zlib library not found")
-endif()
-
-if (NOT ZSTD_LIBRARIES)
-    message(FATAL_ERROR "zstd library not found")
-endif()
+find_package(ZSTD)
 
 add_library(shrinkwrap INTERFACE)
+
+if (LIBLZMA_FOUND)
+  target_compile_definitions(shrinkwrap INTERFACE SHRINKWRAP_USE_XZ=1)
+endif()
+
+if (ZLIB_FOUND)
+  target_compile_definitions(shrinkwrap INTERFACE SHRINKWRAP_USE_GZ=1)
+endif()
+
+if (ZSTD_FOUND)
+    target_compile_definitions(shrinkwrap INTERFACE SHRINKWRAP_USE_ZSTD=1)
+endif()
+
+
 if (CMAKE_VERSION VERSION_GREATER 3.3)
     target_sources(shrinkwrap INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/shrinkwrap/xz.hpp;${CMAKE_CURRENT_SOURCE_DIR}/include/shrinkwrap/gz.hpp;${CMAKE_CURRENT_SOURCE_DIR}/include/shrinkwrap/zstd.hpp;${CMAKE_CURRENT_SOURCE_DIR}/include/shrinkwrap/istream.hpp>)
     target_include_directories(shrinkwrap INTERFACE
                                $<INSTALL_INTERFACE:include>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-    target_link_libraries(shrinkwrap INTERFACE ${LIBLZMA_LIBRARIES} ${ZLIB_LIBRARIES} ${ZSTD_LIBRARIES})
+    target_link_libraries(shrinkwrap INTERFACE LibLZMA::LibLZMA ZLIB::ZLIB zstd::zstd)
 
     add_executable(shrinkwrap-test src/test.cpp)
     target_link_libraries(shrinkwrap-test shrinkwrap)

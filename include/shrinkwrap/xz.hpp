@@ -1,6 +1,8 @@
 #ifndef SHRINKWRAP_XZ_HPP
 #define SHRINKWRAP_XZ_HPP
 
+#ifdef SHRINKWRAP_USE_XZ
+
 #include <streambuf>
 #include <array>
 #include <vector>
@@ -584,5 +586,7 @@ namespace shrinkwrap
     };
   }
 }
+
+#endif
 
 #endif //SHRINKWRAP_XZ_HPP

@@ -4,6 +4,7 @@
 //#ifndef ZSTD_STATIC_LINKING_ONLY
 //#define ZSTD_STATIC_LINKING_ONLY
 //#endif
+#ifdef SHRINKWRAP_USE_ZSTD
 
 #include <zstd.h>
 
@@ -433,4 +434,5 @@ namespace shrinkwrap
   }
 }
 
+#endif
 #endif //SHRINKWRAP_ZSTD_HPP
