@@ -14,6 +14,8 @@ if(SHRINKWRAP_BUILD_TESTS)
 endif()
 
 
+set(ZSTD_LEGACY_SUPPORT OFF)
+set(ZSTD_BUILD_PROGRAMS OFF)
 
 FetchContent_Declare(
   zstd
@@ -57,8 +59,8 @@ add_test(generic_iterator_test shrinkwrap-test generic-iter)
 add_test(generic_seek_test shrinkwrap-test generic-seek)
 
 
-install(TARGETS shrinkwrap EXPORT shrinkwrapExport)
-install(EXPORT shrinkwrapExport NAMESPACE Upstream::
+install(TARGETS shrinkwrap EXPORT Shrinkwrap)
+install(EXPORT Shrinkwrap NAMESPACE shrinkwrap::
   DESTINATION lib/cmake/shrinkwrap)
 install(FILES ${Shrinkwrap_headers} DESTINATION
   include/shrinkwrap)
