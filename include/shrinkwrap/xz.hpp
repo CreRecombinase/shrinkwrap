@@ -1,8 +1,6 @@
 #ifndef SHRINKWRAP_XZ_HPP
 #define SHRINKWRAP_XZ_HPP
 
-#ifdef SHRINKWRAP_USE_XZ
-
 #include <streambuf>
 #include <array>
 #include <vector>
@@ -468,6 +466,9 @@ namespace shrinkwrap
           setp((char*) decompressed_buffer_.data(), (char*) decompressed_buffer_.data() + decompressed_buffer_.size());
         }
 
+        if (fflush(fp_) != 0)
+          return -1;
+
         return 0;
       }
 
@@ -586,7 +587,5 @@ namespace shrinkwrap
     };
   }
 }
-
-#endif
 
 #endif //SHRINKWRAP_XZ_HPP

@@ -1,8 +1,6 @@
 #ifndef SHRINKWRAP_GZ_HPP
 #define SHRINKWRAP_GZ_HPP
 
-#ifdef SHRINKWRAP_USE_GZ
-
 #include <streambuf>
 #include <array>
 #include <vector>
@@ -329,6 +327,9 @@ namespace shrinkwrap
           setp((char*) decompressed_buffer_.data(), (char*) decompressed_buffer_.data() + decompressed_buffer_.size());
         }
 
+        if (fflush(fp_) != 0)
+          return -1;
+
         return 0;
       }
 
@@ -478,6 +479,7 @@ namespace shrinkwrap
         zlib_res_ = inflateReset(&zstrm_);
         char* end = egptr();
         setg(end, end, end);
+        uncompressed_block_offset_ = 0;
 
         return pos;
       }
@@ -607,6 +609,10 @@ namespace shrinkwrap
         std::uint32_t block_length = static_cast<std::uint32_t>(decompressed_buffer_.size() - (epptr() - pptr()));
         if (block_length)
           return write_compressed_block(block_length);
+
+        if (fflush(fp_) != 0)
+          return -1;
+
         return 0;
       }
 
@@ -780,6 +786,5 @@ namespace shrinkwrap
     };
   }
 }
-#endif
 
 #endif //SHRINKWRAP_GZ_HPP
