@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 include(ExternalProject)
 include(CMakePackageConfigHelpers)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMake")
 project(shrinkwrap VERSION 1.0.0 LANGUAGES CXX)
 
 
@@ -26,7 +26,7 @@ find_package(LibLZMA)
 
 find_package(ZLIB)
 
-find_package(ZSTD)
+find_package(Zstd)
 
 add_library(shrinkwrap INTERFACE)
 
