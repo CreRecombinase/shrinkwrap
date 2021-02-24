@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 include(ExternalProject)
 include(CMakePackageConfigHelpers)
-set(CMAKE_MODULE_PATH
-  "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 project(shrinkwrap VERSION 1.0.0 LANGUAGES CXX)
 
 
